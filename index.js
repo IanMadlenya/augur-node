@@ -49,6 +49,7 @@ app.get('/getMarketsInfo', function (req, res) {
     options.page = req.query['page'];
     options.limit = req.query['limit'];
     options.query = req.query['query'];
+    options.sort = req.query['sort'];
 
     if (options.active) options.active = toBool(options.active);
 

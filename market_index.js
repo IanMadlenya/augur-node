@@ -37,8 +37,6 @@ module.exports = {
         var elastic_port = process.env.ELASTIC_PORT || '9200';
         var elastic_endpoint = 'http://' + elastic_host + ':' + elastic_port;
 
-
-        console.log(elastic_endpoint);
         self.augur.connect(config, () => {
             self.augur.rpc.debug.abi = true;
             self.augur.rpc.retryDroppedTxs = true;
@@ -90,6 +88,8 @@ module.exports = {
                             makerFee: { type: "float" },
                             takerFee: { type: "float" },
                             tradingFee: { type: "float" },
+                            creationTime: {type: "long" },
+                            endDate: {type: "long" },
                             branchId: { type: "string" },
                             description: { type: "string" },
                             extraInfo: { type: "string" },
@@ -197,9 +197,46 @@ module.exports = {
                         ]
                     }
                 },
-                sort: {volume: "desc"}
+                //sort: {volume: "desc"}
             },
         };
+
+        var sort;
+        switch (options.sort){
+            case "newest_market":
+                sort = [{ creationTime: "desc" }, { volume: "desc" }];
+                break;
+            case "oldest_market":
+                sort = [{ creationTime: "asc" }, { volume: "desc" }];
+                break;
+            case "most_volume":
+                sort = { volume: "desc" };
+                break;
+            case "least_volume":
+                sort = { volume: "asc" };
+                break;
+            case "soonest_expiry":
+                sort = [{ endDate: "asc" }, { volume: "desc" }];
+                break;
+            case "furthest_expiry":
+                sort = [{ endDate: "desc" }, { volume: "desc" }];
+                break;
+            case "lowest_maker_fee":
+                sort = [{ makerFee: "asc" }, { volume: "desc" }];
+                break;
+            case "lowest_taker_fee":
+                sort = [{ takerFee: "asc" }, { volume: "desc" }];
+                break;
+            case "highest_maker_fee":
+                sort = [{ makerFee: "desc" }, { volume: "desc" }];
+                break;
+            case "highest_taker_fee":
+                sort = [{ takerFee: "desc" }, { volume: "desc" }];
+                break;
+            default:
+                sort = { volume: "desc" };
+        }
+        query_body.body.sort = sort;
         options.query_body = query_body;
         self.queryHelper(options, callback);
     },
@@ -243,6 +280,8 @@ module.exports = {
                 makerFee: parseFloat(info.makerFee),
                 takerFee: parseFloat(info.takerFee),
                 tradingFee: parseFloat(info.tradingFee),
+                endDate: info.endDate,
+                creationTime: info.creationTime,
                 branchId: info.branchId,
                 description: info.description,
                 extraInfo: info.extraInfo,
@@ -357,13 +396,8 @@ module.exports = {
             if (!filtrate) return;
             if (self.debug) console.log("priceChanged filter:", filtrate);
             if (!filtrate['market']) return;
-            if (!filtrate['maker']) return;
-            if (!filtrate['taker']) return;
 
             var id = filtrate['market'];
-            var maker = filtrate['maker'];
-            var taker = filtrate['taker'];
-
             self.augur.getMarketInfo(id, (marketInfo) => {
                 if (self.debug) console.log("priceChanged market info:", marketInfo);
                 self.indexMarket(id, marketInfo);
