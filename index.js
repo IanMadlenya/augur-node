@@ -77,6 +77,21 @@ app.get('/getMarketsInfo', function (req, res) {
 
 });
 
+app.get('/getTags', function (req, res) {
+
+    var options = {};
+    options.page = req.query['page'];
+    options.limit = req.query['limit'];
+    options.branchId = req.query['branchId'] || index.augur.constants.DEFAULT_BRANCH_ID;
+
+    index.getTags(options, (err, response) => {
+        if (err){
+               return res.status(500).send({ error: err });
+            }
+            return res.send(response);   
+    });
+});
+
 process.on("uncaughtException", function (e) {
     log(timestamp(chalk.red("Uncaught exception\n")));
     try {

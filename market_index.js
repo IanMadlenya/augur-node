@@ -93,7 +93,8 @@ module.exports = {
                             branchId: { type: "string" },
                             description: { type: "string" },
                             extraInfo: { type: "string" },
-                            tags: { type: "string" },
+                            tags: {type: "string"},
+                            tags_full: {type: "string", index: "not_analyzed"},
                             volume: { type: "float" },
                             active: { type: "boolean" }
                         }
@@ -157,7 +158,7 @@ module.exports = {
                                     }
                                 }},
                                 { match: { 
-                                    tags:  {
+                                    tag:  {
                                       query: options.query,
                                       boost: 2,
                                       fuzziness : 2
@@ -197,7 +198,6 @@ module.exports = {
                         ]
                     }
                 },
-                //sort: {volume: "desc"}
             },
         };
 
@@ -241,11 +241,47 @@ module.exports = {
         self.queryHelper(options, callback);
     },
 
+    getTags: function(options, callback){
+        var self = this;
+
+        //if (!options.branchId) return callback("branch required.");
+        var num_tags = options.limit || 100;
+        options.limit = 0;
+
+        var query_body = {
+            index: self.market_index,
+            type: "marketInfo",
+            body: {
+                query: {
+                    filtered: {
+                        filter: [
+                            { term: { branchId: options.branchId } }
+                        ]
+                    }
+                },
+                aggs: {
+                    tag_agg : {
+                        terms: {
+                            size: num_tags,
+                            field : "tags_full",
+                        }
+                    }
+                }
+            }
+        }
+
+        options.query_body = query_body;
+        self.queryHelper(options, callback);
+    },
+
     queryHelper: function(options, callback){
         var self = this;
 
         var page = options.page || 1;
         var limit = options.limit || 10;
+
+        //still do want to allow 0 search results, in the case of a pure aggregration query.
+        if (options.limit == 0) limit = 0;
 
         options.query_body.from = (page - 1) * limit;
         options.query_body.size = limit;
@@ -271,24 +307,27 @@ module.exports = {
         if (!info) return callback("indexMarket: market data not found");
         if (!info.branchId) return callback("indexMarket: branchId not found in market data");
         if (!self.elastic) return callback("indexMarket: elasticSearch not ready");
-        
-        self.elastic.index({
-            index: self.market_index,
-            id: id,
-            type: "marketInfo",
-            body: {
+        info.tags[1] = "kevin is cool";
+        var body = {
                 makerFee: parseFloat(info.makerFee),
                 takerFee: parseFloat(info.takerFee),
                 tradingFee: parseFloat(info.tradingFee),
                 endDate: info.endDate,
                 creationTime: info.creationTime,
                 branchId: info.branchId,
+                tags: info.tags,
+                tags_full: info.tags,
                 description: info.description,
                 extraInfo: info.extraInfo,
-                tags: info.tags,
                 volume: parseFloat(info.volume),
                 active: !(info.winningOutcomes.length),
-            }
+            };
+
+        self.elastic.index({
+            index: self.market_index,
+            id: id,
+            type: "marketInfo",
+            body: body
         }, function (err, response, status) {
             if (err) return callback(err);
             if (self.debug) console.log(response, status);
