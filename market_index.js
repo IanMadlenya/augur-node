@@ -290,7 +290,11 @@ module.exports = {
         if (options.active != undefined && options.active != null){
             options.query_body.body.query.filtered.filter.push({ term: { active: options.active } });
         }
-        //initial market filter
+
+        if (options.tag){
+            options.query_body.body.query.filtered.filter.push({ term: { tags_full: options.tag } });
+        }
+
         self.elastic.search(options.query_body, function (error, response, status) {
             if (error){
                 return callback(error);
@@ -307,8 +311,12 @@ module.exports = {
         if (!info) return callback("indexMarket: market data not found");
         if (!info.branchId) return callback("indexMarket: branchId not found in market data");
         if (!self.elastic) return callback("indexMarket: elasticSearch not ready");
-        info.tags[1] = "kevin is cool";
-        var body = {
+
+        self.elastic.index({
+            index: self.market_index,
+            id: id,
+            type: "marketInfo",
+            body: {
                 makerFee: parseFloat(info.makerFee),
                 takerFee: parseFloat(info.takerFee),
                 tradingFee: parseFloat(info.tradingFee),
@@ -321,13 +329,7 @@ module.exports = {
                 extraInfo: info.extraInfo,
                 volume: parseFloat(info.volume),
                 active: !(info.winningOutcomes.length),
-            };
-
-        self.elastic.index({
-            index: self.market_index,
-            id: id,
-            type: "marketInfo",
-            body: body
+            }
         }, function (err, response, status) {
             if (err) return callback(err);
             if (self.debug) console.log(response, status);
