@@ -3,7 +3,7 @@ elasticsearch:
     restart: on-failure
 
 geth:
-    image: ethereum/client-go:alpine
+    image: ethereum/client-go:alpine-develop
     entrypoint: sh /tmp/start_geth.sh
     volumes:
        - ./:/tmp
