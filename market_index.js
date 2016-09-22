@@ -305,7 +305,8 @@ module.exports = {
 
     indexMarket: function(id, info, callback){
         var self = this;
-
+        callback = callback || noop;
+        
         id = self.normalizeId(id);
         if (!id) return callback("indexMarket: id not found");
         if (!info) return callback("indexMarket: market data not found");

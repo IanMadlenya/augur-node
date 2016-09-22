@@ -1,6 +1,6 @@
 sudo apt-get update
 sudo apt-get install -y git
-sudo apt-get install linux-image-generic-lts-trusty
+sudo apt-get install -y linux-image-generic-lts-trusty
 
 sudo reboot
 curl -sSL https://get.docker.com/ | sh
