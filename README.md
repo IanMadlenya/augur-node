@@ -71,3 +71,5 @@ If you are interestd in retrieving the top n most popular tags, you can do:
 `http://your_server:8547/getTags?limit=1000`
 
 This will return you the top 1000 tags. The `page` parameter is not supported here due to a limitation in how aggregrations work in elasticsearch.
+
+You can also specify a `branchId` to return tags from. Default branch will be used if not specified.

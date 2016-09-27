@@ -306,7 +306,7 @@ module.exports = {
     indexMarket: function(id, info, callback){
         var self = this;
         callback = callback || noop;
-        
+
         id = self.normalizeId(id);
         if (!id) return callback("indexMarket: id not found");
         if (!info) return callback("indexMarket: market data not found");
@@ -342,24 +342,23 @@ module.exports = {
         var self = this;
         var numMarkets = 0;
         
-        function indexMarkets(data, callback) {
+        function indexMarkets(data, index_callback) {
             
             self.augur.batchGetMarketInfo(data.ids, (markets) => {
-                if (!markets) return callback("error fetching markets");
+                if (!markets) return index_callback("error fetching markets");
                 async.each(Object.keys(markets), function (id, nextMarket) {
                     var marketInfo = markets[id];
                     if (!marketInfo) nextMarket("error loading marketInfo");
                     self.indexMarket(id, marketInfo, (err) => {                     
-                        if (err) return callback(err);
+                        if (err) return index_callback(err);
                         return nextMarket(null);
                     });
                 }, function (err) {
                     if (data.status) console.log(data.status);
-                    if (err) return callback(err);
-                    return callback(null);
+                    if (err) return index_callback(err);
+                    return index_callback(null);
                 });
             });
-            
         }
 
         //careful about setting # workers too high. Geth will choke
@@ -521,6 +520,7 @@ module.exports = {
                                 setTimeout(syncWait, 30000);
                                 return;
                             }
+                            peers=parseInt(peers);
                             if (self.debug) console.log("syncWait:", syncing, peers);
                             if (!peers){
                                 console.log("Waiting for peers");
