@@ -7,6 +7,8 @@ To setup a node:
 2. Clone this repository
 3. run `docker-compose up -d`
 
+Instructions to do this on Ubuntu can be found here: https://github.com/AugurProject/augur-node/blob/master/ubuntu_install_commands.sh
+
 You can test that your augur_node is working by navigating to `http://your_server:8547/getMarketsInfo` in your browser. There will be a delay between when you spin up your node and when you actually see market data as geth must first sync.
 
 An augur_node does not manage your networking for you, so please verify that ports 8545 (geth rpc), 8546 (geth websockets), 8547 (augur_node) are open on your machine.
@@ -73,3 +75,8 @@ If you are interestd in retrieving the top n most popular tags, you can do:
 This will return you the top 1000 tags. The `page` parameter is not supported here due to a limitation in how aggregrations work in elasticsearch.
 
 You can also specify a `branchId` to return tags from. Default branch will be used if not specified.
+
+# Development
+You can run this without Docker during development if you'd like, assuming you have elasticsearch (port 9200) and geth running on your local machine configured to accept RPC and websocket requests (ports 8545 and 8546). Your local augur_node can be run by doing `node index.js`
+
+Doing it this way is fine for development, but be careful using your own geth instance especially if it is used for other purposes, if it contains anything of value, or if you unlock it on occassion. Production augur_nodes should ideally be run on their own machine/vm using docker-compose mentioned above for isolation, predictable deployment, and seamless handling of container networking, dependencies, restarts, etc. If for some reason you still decide you want to manually run augur_node in production, you should put it in a service (like upstart) so it at the very handles restarts on errors, reboots, etc, and ensure that you are using safe geth settings.
