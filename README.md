@@ -79,4 +79,11 @@ You can also specify a `branchId` to return tags from. Default branch will be us
 # Development
 You can run this without Docker during development if you'd like, assuming you have elasticsearch (port 9200) and geth running on your local machine configured to accept RPC and websocket requests (ports 8545 and 8546). Your local augur_node can be run by doing `node index.js`
 
-Doing it this way is fine for development, but be careful using your own geth instance especially if it is used for other purposes, if it contains anything of value, or if you unlock it on occassion. Production augur_nodes should ideally be run on their own machine/vm using docker-compose mentioned above for isolation, predictable deployment, and seamless handling of container networking, dependencies, restarts, etc. If for some reason you still decide you want to manually run augur_node in production, you should put it in a service (like upstart) so it at the very handles restarts on errors, reboots, etc, and ensure that you are using safe geth settings.
+Doing it this way is fine for development, but be careful using your own geth instance especially if it is used for other purposes, if it contains anything of value, or if you unlock it on occassion. Production augur_nodes should ideally be run on their own machine/vm using docker-compose mentioned above for isolation, predictable deployment, and seamless handling of container networking, dependencies, restarts, etc.
+
+If for some reason you still decide you want to manually run augur_node in production, you should put it in a service (like upstart) so it at the very handles restarts on errors, reboots, etc, and ensure that you are using safe geth settings.
+
+Some additional commands for installing elasticseach on ubuntu can be found here: 
+https://github.com/AugurProject/augur-node/blob/master/ubuntu_setup_elasticsearch.sh
+
+Also, if you change anything in `package.json`, please run `npm shrinkwrap`.
