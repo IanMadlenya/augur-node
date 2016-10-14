@@ -9,4 +9,3 @@ sudo update-rc.d elasticsearch defaults
 sudo service elasticsearch start
 #Test that it's running (may take ~10 seconds to start)
 curl -X GET 'http://localhost:9200'
-
