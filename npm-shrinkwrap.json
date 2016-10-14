@@ -48,19 +48,19 @@
       "resolved": "https://registry.npmjs.org/async/-/async-1.4.2.tgz"
     },
     "augur-abi": {
-      "version": "0.6.3",
-      "from": "augur-abi@0.6.3",
-      "resolved": "https://registry.npmjs.org/augur-abi/-/augur-abi-0.6.3.tgz"
+      "version": "0.6.4",
+      "from": "augur-abi@0.6.4",
+      "resolved": "https://registry.npmjs.org/augur-abi/-/augur-abi-0.6.4.tgz"
     },
     "augur-contracts": {
-      "version": "2.1.3",
-      "from": "augur-contracts@2.1.3",
-      "resolved": "https://registry.npmjs.org/augur-contracts/-/augur-contracts-2.1.3.tgz"
+      "version": "2.1.4",
+      "from": "augur-contracts@2.1.4",
+      "resolved": "https://registry.npmjs.org/augur-contracts/-/augur-contracts-2.1.4.tgz"
     },
     "augur.js": {
-      "version": "2.9.14",
-      "from": "augur.js@2.9.14",
-      "resolved": "https://registry.npmjs.org/augur.js/-/augur.js-2.9.14.tgz",
+      "version": "2.9.15",
+      "from": "augur.js@2.9.15",
+      "resolved": "https://registry.npmjs.org/augur.js/-/augur.js-2.9.15.tgz",
       "dependencies": {
         "async": {
           "version": "1.5.2",
@@ -334,9 +334,9 @@
       "resolved": "https://registry.npmjs.org/ethereumjs-abi/-/ethereumjs-abi-0.6.2.tgz"
     },
     "ethereumjs-connect": {
-      "version": "1.2.15",
-      "from": "ethereumjs-connect@1.2.15",
-      "resolved": "https://registry.npmjs.org/ethereumjs-connect/-/ethereumjs-connect-1.2.15.tgz",
+      "version": "1.2.17",
+      "from": "ethereumjs-connect@1.2.17",
+      "resolved": "https://registry.npmjs.org/ethereumjs-connect/-/ethereumjs-connect-1.2.17.tgz",
       "dependencies": {
         "async": {
           "version": "1.5.2",
@@ -356,19 +356,14 @@
       "resolved": "https://registry.npmjs.org/ethereumjs-util/-/ethereumjs-util-4.4.1.tgz"
     },
     "ethrpc": {
-      "version": "1.9.6",
-      "from": "ethrpc@1.9.6",
-      "resolved": "https://registry.npmjs.org/ethrpc/-/ethrpc-1.9.6.tgz",
+      "version": "1.9.8",
+      "from": "ethrpc@1.9.8",
+      "resolved": "https://registry.npmjs.org/ethrpc/-/ethrpc-1.9.8.tgz",
       "dependencies": {
         "async": {
           "version": "1.5.2",
           "from": "async@1.5.2",
           "resolved": "https://registry.npmjs.org/async/-/async-1.5.2.tgz"
-        },
-        "augur-contracts": {
-          "version": "2.1.2",
-          "from": "augur-contracts@2.1.2",
-          "resolved": "https://registry.npmjs.org/augur-contracts/-/augur-contracts-2.1.2.tgz"
         },
         "request": {
           "version": "2.67.0",
