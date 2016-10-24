@@ -13,6 +13,12 @@ You can test that your augur_node is working by navigating to `http://your_serve
 
 An augur_node does not manage your networking for you, so please verify that ports 8545 (geth rpc), 8546 (geth websockets), 8547 (augur_node) are open on your machine.
 
+To update a container, you can do something like:
+
+`docker pull ethereum/client-go:alpine-develop`
+
+`docker-compose up -d --no-deps --build geth`
+
 # endpoints
 Your cache node will have the following endpoints available:
 ## getMarketsInfo
