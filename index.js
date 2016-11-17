@@ -1,9 +1,15 @@
+/**
+ * Augur market monitor
+ * @author Keivn Day (@k_day)
+ */
+
+
 var http = require("http");
 var getopt = require("posix-getopt");
 var chalk = require("chalk");
 var express = require('express');
-var join = require("path").join;
-var index = require("./market_index");
+var loader = require("./elastic_loader");
+var market_index = require('./indexes/markets');
 
 var geth_host = process.env.GETH_HOST || "localhost";
 
@@ -44,7 +50,7 @@ function toBool(str){
 app.get('/getMarketsInfo', function (req, res) {
 
     var options = {};
-    options.branchId = req.query['branchId'] || index.augur.constants.DEFAULT_BRANCH_ID;
+    options.branchId = req.query['branchId'] || loader.augur.constants.DEFAULT_BRANCH_ID;
     options.active = req.query['active'];
     options.page = req.query['page'];
     options.limit = req.query['limit'];
@@ -61,21 +67,14 @@ app.get('/getMarketsInfo', function (req, res) {
 
     //if query passed in, it's a search. Otherwise it's a filter
     if (options.query){
-        index.marketSearch(options, (err, response) => {
-            if (err){
-               return res.status(500).send({ error: err });
-            }
-            return res.send(response);   
-        });
+        market_index.searchMarkets(options)
+        .then( (response) => {res.send(response)})
+        .catch( (error) => {res.status(500).send({ error: error })});
     }else{
-        index.loadMarkets(options, (err, response) => {
-            if (err){
-               return res.status(500).send({ error: err });
-            }
-            return res.send(response);   
-        });
+        market_index.filterMarkets(options)
+        .then( (response) => {res.send(response)})
+        .catch( (error) => {res.status(500).send({ error: error })});
     }
-
 });
 
 app.get('/getTags', function (req, res) {
@@ -83,14 +82,11 @@ app.get('/getTags', function (req, res) {
     var options = {};
     options.page = req.query['page'];
     options.limit = req.query['limit'];
-    options.branchId = req.query['branchId'] || index.augur.constants.DEFAULT_BRANCH_ID;
+    options.branchId = req.query['branchId'] || loader.augur.constants.DEFAULT_BRANCH_ID;
 
-    index.getTags(options, (err, response) => {
-        if (err){
-               return res.status(500).send({ error: err });
-            }
-            return res.send(response);   
-    });
+    market_index.getTags(options)
+    .then( (response) => {res.send(response)})
+    .catch( (error) => {res.status(500).send({ error: error })});
 });
 
 process.on("uncaughtException", function (e) {
@@ -106,16 +102,16 @@ process.on("uncaughtException", function (e) {
 });
 
 process.on("exit", function (code) {
-     index.unwatch( () => {
-        index.disconnect( () => {
+     loader.unwatch( () => {
+        loader.disconnect( () => {
             log(timestamp(chalk.red("Augur node shut down (" + code.toString() + ")\n")));
         });
     });
 });
 
 process.on("SIGINT", function () {
-    index.unwatch( () => {
-        index.disconnect( () => {
+    loader.unwatch( () => {
+        loader.disconnect( () => {
             log(timestamp(chalk.red("Augur node shut down (SIGINT)\n")));
             process.exit(2);
         })
@@ -147,7 +143,7 @@ function runserver(protocol, port) {
     runserver(protocol || "http", port || process.env.PORT || 8547);
     //to be safe, rescan on every restart. Markets might have updated
     //when node was down.
-    index.watch(config, function (err, numUpdates) {
+    loader.watch(config, function (err, numUpdates) {
         if (err) throw err;
         log(numUpdates + " markets have been updated!");
     });
