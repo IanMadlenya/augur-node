@@ -71,7 +71,7 @@ var doc1 = { network: '2',
   tags: [ 'ether', '2', '3' ],
   type: 'binary',
   endDate: 24000,
-  winningOutcomes: [],
+  reportedOutcome: null,
   description: 'price of ether',
   extraInfo: 'ether',
   outcomes: 
@@ -102,7 +102,7 @@ var doc2 = { network: '2',
   tags: [ 'ether', '5', '6' ],
   type: 'binary',
   endDate: 20000,
-  winningOutcomes: [],
+  reportedOutcome: null,
   description: 'price of ether',
   extraInfo: '',
   outcomes: 
@@ -133,7 +133,7 @@ var doc3 = { network: '2',
   tags: [ '7', '8', '9' ],
   type: 'binary',
   endDate: 27000,
-  winningOutcomes: [],
+  reportedOutcome: null,
   description:'price of ether',
   extraInfo: '',
   outcomes: 
@@ -164,7 +164,7 @@ var doc4 = { network: '2',
   tags: [ '10', '11', '12' ],
   type: 'binary',
   endDate: 23000,
-  winningOutcomes: [],
+  reportedOutcome: null,
   description: 'doc4',
   outcomes: 
    [ { id: 1, outstandingShares: '0', price: '0' },
@@ -195,7 +195,7 @@ var doc5 = { network: '2',
   tags: [ '10', '11', '12' ],
   type: 'binary',
   endDate: 23000,
-  winningOutcomes: [ 0 ],
+  reportedOutcome: '0',
   description: 'doc5',
   outcomes: 
    [ { id: 1, outstandingShares: '0', price: '0' },
@@ -226,7 +226,7 @@ var doc6 = { network: '2',
   tags: [ '10', '11', '12' ],
   type: 'binary',
   endDate: 23000,
-  winningOutcomes: [ 0 ],
+  reportedOutcome: '0',
   description: 'doc6',
   outcomes: 
    [ { id: 1, outstandingShares: '0', price: '0' },
@@ -256,11 +256,6 @@ describe("loadMarket", function () {
             assert.equal(result['takerFee'], doc1['takerFee']);
             assert.equal(result['tradingFee'], doc1['tradingFee']);
             assert.equal(result['tradingPeriod'], doc1['tradingPeriod']);
-            assert.equal(result['numEvents'], doc1['numEvents']);
-            assert.equal(result['cumulativeScale'], doc1['cumulativeScale']);
-            assert.equal(result['author'], doc1['author']);
-            assert.deepEqual(result['winningOutcomes'], doc1['winningOutcomes']);
-            assert.equal(result['numOutcomes'], doc1['numOutcomes']);
             assert.equal(result['creationTime'], doc1['creationTime']);
             assert.equal(result['endDate'], doc1['endDate']);
             assert.equal(result['branchId'], doc1['branchId']);
@@ -268,11 +263,8 @@ describe("loadMarket", function () {
             assert.equal(result['extraInfo'], doc1['extraInfo']);
             assert.deepEqual(result['tags'], doc1['tags']);
             assert.property(result, 'tags_full');
-            assert.equal(result['type'], doc1['type']);
             assert.equal(result['volume'], doc1['volume']);
-            assert.deepEqual(result['events'], doc1['events']);
             assert.property(result, "active");
-            assert.equal(result['resolution'], doc1['resolution']);
             done();
         }).catch((err) =>{
             console.log(err);
