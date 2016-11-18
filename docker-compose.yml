@@ -1,12 +1,12 @@
 elasticsearch:
-    image: elasticsearch:latest
+    image: elasticsearch:5.0.1
     restart: on-failure
 
 geth:
-    image: ethereum/client-go:alpine-develop
-    entrypoint: sh /tmp/start_geth.sh
+    image: ethereum/client-go:alpine
+    entrypoint: sh /root/start_geth.sh
     volumes:
-       - ./:/tmp
+       - ./:/root
     restart: on-failure
     ports:
         - '8545:8545'
