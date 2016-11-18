@@ -7,10 +7,9 @@ var async = require("async");
 
 module.exports = {
 
-	index_name: "markets_info",
-
-    //increement int here to create new index version
-	version: "v1",
+	//increement int here to create new index version
+	index_name: "markets_info_v1",
+	type: "info",
 
 	elastic: null,
 
@@ -45,7 +44,7 @@ module.exports = {
                 mappings: {}
             }
         };
-        payload["body"]["mappings"][self.version] = {"properties": self.properties};
+        payload["body"]["mappings"][self.type] = {"properties": self.properties};
 
         return self.elastic.indices.create(payload);
 	},
@@ -83,7 +82,7 @@ module.exports = {
 
             self.elastic.index({
                 index: self.index_name,
-                type: self.version,
+                type: self.type,
                 id: id,
                 body: {
                     makerFee: parseFloat(info.makerFee),
@@ -118,7 +117,7 @@ module.exports = {
 
             self.elastic.get({
                 index: self.index_name,
-                type: self.version,
+                type: self.type,
                 id: id,         
             }).then( (result) => {
                 if (result._source){
@@ -217,7 +216,7 @@ module.exports = {
 
             var query_body = {
                 index: self.index_name,
-                type: self.version,
+                type: self.type,
                 body: {
                     query: {
                         bool: {
@@ -260,7 +259,7 @@ module.exports = {
 
             var query_body = {
                 index: self.index_name,
-                type: self.version,
+                type: self.type,
                 body: {
                     query: {
                         bool: {
@@ -326,7 +325,7 @@ module.exports = {
 
             var query_body = {
                 index: self.index_name,
-                type: self.version,
+                type: self.type,
                 body: {
                     query: {
                         bool: {
@@ -384,7 +383,7 @@ module.exports = {
 
             var query_body = {
                 index: self.index_name,
-                type: self.version,
+                type: self.type,
                 body: {
                     query: {
                         bool: {
