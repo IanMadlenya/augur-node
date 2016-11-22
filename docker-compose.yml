@@ -13,9 +13,7 @@ geth:
         - '8546:8546'
 
 augur_node:
-    #image: augurproject/augur-node:0.3.0
-    image: augurproject/augur-node
-    #build: .
+    image: augurproject/augur-node:0.3.1
     command: sh /home/augur/start_augur_node.sh
     environment:
         - ELASTIC_HOST=elasticsearch

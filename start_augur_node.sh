@@ -22,6 +22,4 @@ fi
 while ! curl $elastichost; do sleep 1; done;
 while ! curl $gethhost; do sleep 1; done;
 
-pwd
-ls -la
 node index.js
