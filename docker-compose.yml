@@ -13,15 +13,14 @@ geth:
         - '8546:8546'
 
 augur_node:
-    build: .
+    #image: augurproject/augur-node:0.3.0
+    image: augurproject/augur-node
+    #build: .
     command: sh /home/augur/start_augur_node.sh
     environment:
         - ELASTIC_HOST=elasticsearch
         - ELASTIC_PORT=9200
         - GETH_HOST=geth
-    volumes:
-        - .:/home/augur
-        - /home/augur/node_modules
     ports:
         - '8547:8547'
     links:
