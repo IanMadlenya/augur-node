@@ -24,7 +24,7 @@ module.exports = {
         description:     { type: "text" },
         extraInfo:       { type: "text" },
         tags:            { type: "text" },
-        tags_full:       { type: "text", fielddata: true},
+        tags_full:       { type: "keyword"},
         volume:          { type: "float" },
         active:          { type: "boolean" },
 	},

@@ -115,6 +115,36 @@ module.exports = {
             });
         }
 
+        function syncWait() {
+            self.augur.rpc.eth("syncing", {}, function (syncing) {
+                if (syncing.error){
+                    console.log("RPC error:", syncing.error);
+                    setTimeout(syncWait, 30000);
+                    return;
+                }
+                self.augur.rpc.net("peerCount", {}, (peers) => {
+                    if (peers.error){
+                        console.log("RPC error:", peers.error);
+                        setTimeout(syncWait, 30000);
+                        return;
+                    }
+                    peers=parseInt(peers);
+                    if (self.debug) console.log("syncWait:", syncing, peers);
+                    if (!peers){
+                        console.log("Waiting for peers");
+                        setTimeout(syncWait, 30000);
+                        return;
+                    }
+                    if (syncing == false){
+                        doneSyncing();
+                    }else{
+                        console.log('Blockchain still syncing:', (parseInt(syncing['currentBlock'])/parseInt(syncing['highestBlock'])*100).toFixed(1) + "% complete");
+                        setTimeout(syncWait, 30000);
+                    }
+                });
+            });
+        }
+
         function doneSyncing(){
 
             function scanHelper(){
@@ -153,35 +183,6 @@ module.exports = {
             } else {
                 if (self.debug) console.log("Connected");
                 //Wait until syncing completes to scan/setup filters.
-                function syncWait() {
-                    self.augur.rpc.eth("syncing", {}, function (syncing) {
-                        if (syncing.error){
-                            console.log("RPC error:", syncing.error);
-                            setTimeout(syncWait, 30000);
-                            return;
-                        }
-                        self.augur.rpc.net("peerCount", {}, (peers) => {
-                            if (peers.error){
-                                console.log("RPC error:", peers.error);
-                                setTimeout(syncWait, 30000);
-                                return;
-                            }
-                            peers=parseInt(peers);
-                            if (self.debug) console.log("syncWait:", syncing, peers);
-                            if (!peers){
-                                console.log("Waiting for peers");
-                                setTimeout(syncWait, 30000);
-                                return;
-                            }
-                            if (syncing == false){
-                                doneSyncing();
-                            }else{
-                                console.log('Blockchain still syncing:', (parseInt(syncing['currentBlock'])/parseInt(syncing['highestBlock'])*100).toFixed(1) + "% complete");
-                                setTimeout(syncWait, 30000);
-                            }
-                        });
-                    });
-                }
                 syncWait();
             }
         });
