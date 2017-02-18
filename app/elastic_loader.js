@@ -54,7 +54,7 @@ module.exports = {
                 return callback(null, numMarkets);
             })
             .catch(function (e){
-                return callback(err);
+                return callback(e);
             })
         } else {
             this.connect(config, (err) => {
