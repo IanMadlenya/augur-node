@@ -10,7 +10,7 @@ COPY ./app/package.json /tmp/package.json
 # Copy source code
 COPY ./app $HOME
 
-RUN apk update && apk add python gcc g++ make
+RUN apk update && apk add python curl bash gcc g++ make && rm -rf /var/cache/apk/*
 # Install dependencies and Copy dependencies libraries
 RUN cd /tmp && npm install
 
