@@ -24,7 +24,7 @@ Your cache node will have the following endpoints available:
 ## getMarketsInfo
 
 ### filtered mode
-`http://your_server:8547/getMarketsInfo?branchId=branchId`
+`http://your_server:8547/getMarketsInfo?branchID=branchID`
 
 If branch isn't specified, the default branch will be used.
 
@@ -80,7 +80,7 @@ If you are interestd in retrieving the top n most popular tags, you can do:
 
 This will return you the top 1000 tags. The `page` parameter is not supported here due to a limitation in how aggregrations work in elasticsearch.
 
-You can also specify a `branchId` to return tags from. Default branch will be used if not specified.
+You can also specify a `branchID` to return tags from. Default branch will be used if not specified.
 
 # Development
 You can run this without Docker during development if you'd like, assuming you have elasticsearch (port 9200) and geth running on your local machine configured to accept RPC and websocket requests (ports 8545 and 8546). Your local augur_node can be run by doing `node index.js`

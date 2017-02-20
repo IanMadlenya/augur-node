@@ -50,7 +50,7 @@ function toBool(str){
 app.get('/getMarketsInfo', function (req, res) {
 
     var options = {};
-    options.branchId = req.query['branchId'] || loader.augur.constants.DEFAULT_BRANCH_ID;
+    options.branchID = req.query['branchID'] || loader.augur.constants.DEFAULT_BRANCH_ID;
     options.active = req.query['active'];
     options.page = req.query['page'];
     options.limit = req.query['limit'];
@@ -61,8 +61,8 @@ app.get('/getMarketsInfo', function (req, res) {
     if (options.active) options.active = toBool(options.active);
 
     //convert branch id to hex if int as passed in
-    if (isPositiveInt(options['branchId'])){
-        options['branchId'] = "0x" + parseInt(options['branchId']).toString(16);
+    if (isPositiveInt(options['branchID'])){
+        options['branchID'] = "0x" + parseInt(options['branchID']).toString(16);
     }
 
     //if query passed in, it's a search. Otherwise it's a filter
@@ -82,7 +82,7 @@ app.get('/getTags', function (req, res) {
     var options = {};
     options.page = req.query['page'];
     options.limit = req.query['limit'];
-    options.branchId = req.query['branchId'] || loader.augur.constants.DEFAULT_BRANCH_ID;
+    options.branchID = req.query['branchID'] || loader.augur.constants.DEFAULT_BRANCH_ID;
 
     market_index.getTags(options)
     .then( (response) => {res.send(response)})

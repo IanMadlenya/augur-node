@@ -20,7 +20,7 @@ module.exports = {
         tradingPeriod:   { type: "integer" },
         creationTime:    { type: "long" },
         endDate:         { type: "long" },
-        branchId:        { type: "text" },
+        branchID:        { type: "text" },
         description:     { type: "text" },
         extraInfo:       { type: "text" },
         tags:            { type: "text" },
@@ -77,7 +77,7 @@ module.exports = {
         return new Promise(function(resolve, reject) {
             if (!id) reject("indexMarket: id not found");
             if (!info) reject("indexMarket: market data not found");
-            if (!info.branchId) reject("indexMarket: branchId not found in market data");
+            if (!info.branchID) reject("indexMarket: branchID not found in market data");
             if (!self.elastic) reject("indexMarket: elasticSearch not ready");
 
             self.elastic.index({
@@ -91,7 +91,7 @@ module.exports = {
                     tradingPeriod: info.tradingPeriod,
                     creationTime: info.creationTime,
                     endDate: info.endDate,
-                    branchId: info.branchId,
+                    branchID: info.branchID,
                     description: info.description,
                     extraInfo: info.extraInfo,
                     tags: info.tags,
@@ -220,7 +220,7 @@ module.exports = {
                 body: {
                     query: {
                         bool: {
-                            filter: [ { term: { branchId: options.branchId } } ]
+                            filter: [ { term: { branchID: options.branchID } } ]
                         }
                     },
                 },
@@ -254,7 +254,7 @@ module.exports = {
         var self = this;
 
         return new Promise(function(resolve, reject) {
-            if (!options.branchId) reject("branch required.");
+            if (!options.branchID) reject("branch required.");
             if (!self.elastic) reject("market index not initialized");
 
             var query_body = {
@@ -263,7 +263,7 @@ module.exports = {
                 body: {
                     query: {
                         bool: {
-                            filter: [ { term: { branchId: options.branchId } } ]
+                            filter: [ { term: { branchID: options.branchID } } ]
                         }
                     },
                 },
@@ -319,7 +319,7 @@ module.exports = {
         var self = this;
 
         return new Promise(function(resolve, reject) {
-            if (!options.branchId) return reject("branch required.");
+            if (!options.branchID) return reject("branch required.");
             if (!options.query) return reject("queryrequired.");
             if (!self.elastic) return reject("market index not initialized");
 
@@ -357,7 +357,7 @@ module.exports = {
                                     fuzziness : 2
                                 }
                             }}],
-                            filter: [ { term: { branchId: options.branchId } } ]
+                            filter: [ { term: { branchID: options.branchID } } ]
                         }
                     }
                 }
@@ -377,7 +377,7 @@ module.exports = {
         var self = this;
 
         return new Promise(function(resolve, reject) {
-            if (!options.branchId) reject("branch required.");
+            if (!options.branchID) reject("branch required.");
             var num_tags = options.limit || 100;
             options.limit = 0;
 
@@ -388,7 +388,7 @@ module.exports = {
                     query: {
                         bool: {
                             filter: [
-                                { term: { branchId: options.branchId } }
+                                { term: { branchID: options.branchID } }
                             ]
                         }
                     },
