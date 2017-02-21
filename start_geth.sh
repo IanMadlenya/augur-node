@@ -14,4 +14,4 @@ if [ -z "$accounts" ]; then
 fi
 
 #echo "starting geth"
-./geth --testnet --fast --cache=512 --rpcaddr "0.0.0.0" --rpc --rpccorsdomain "*" --rpcapi "eth,net,web3,txpool" --ws --wsapi "eth,net,web3,txpool" --wsport 8546 --wsorigins "*"
+./geth --testnet --fast --cache=1024 --rpcaddr "0.0.0.0" --rpc --rpccorsdomain "*" --rpcapi "eth,net,web3,txpool" --ws --wsapi "eth,net,web3,txpool" --wsport 8546 --wsorigins "*"
